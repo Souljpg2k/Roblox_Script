@@ -1,23 +1,16 @@
 local UIS = game:GetService("UserInputService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-
-local playerGui = player:WaitForChild("PlayerGui")
+local player = game:GetService("Players").LocalPlayer
 local sound = Instance.new("Sound")
+
 sound.SoundId = "rbxassetid://115925172742147"
 sound.Looped = true
-sound.Volume = 0.8
-sound.Parent = playerGui
-
-local soundLoaded = false
-sound.Loaded:Connect(function()
-	soundLoaded = true
-	print("Sound loaded successfully!")
-end)
+sound.Volume = 0.5
+sound.Parent = game:GetService("SoundService")
 
 if not sound.IsLoaded then
 	sound.Loaded:Wait()
 end
+print("Sound loaded successfully!")
 
 local debounce = false
 
@@ -30,7 +23,7 @@ UIS.InputBegan:Connect(function(input, gameProcessed)
 			return
 		end
 
-		if not soundLoaded and not sound.IsLoaded then
+		if not sound.IsLoaded then
 			warn("Sound is still loading, please wait...")
 			return
 		end
@@ -39,10 +32,10 @@ UIS.InputBegan:Connect(function(input, gameProcessed)
 
 		if sound.IsPlaying then
 			sound:Pause()
-			print("Sound paused")
+			print("Sound paused at: " .. sound.TimePosition .. "s")
 		else
 			sound:Resume()
-			print("Sound playing")
+			print("Sound playing from: " .. sound.TimePosition .. "s")
 		end
 
 		task.wait(0.2)
